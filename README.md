@@ -46,12 +46,4 @@ assets/
 git clone https://github.com/Hafdoon05/kasatria-3d-visualization.git
 
 Open the folder in VS Code → Open with Live Server → Sign in with Google.
-
-🌐 Deployment
-
-Hosted via GitHub Pages.
-Updates to the main branch automatically refresh the live site.
-
-📄 License
-
 MIT License.
