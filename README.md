@@ -1,101 +1,57 @@
 Kasatria 3D People Visualization
 
-A 3D interactive data-visualization web application built for the Kasatria preliminary assignment.
-This project integrates Google Sign-In, Google Sheets, and Three.js CSS3DRenderer to dynamically display people data in multiple 3D layouts.
+A 3D interactive data visualization built for the Kasatria preliminary assignment.
+The app uses Google Sign-In, Google Sheets, and Three.js CSS3DRenderer to display people data in multiple 3D layouts.
 
 🚀 Live Demo
 
-Webpage:
 https://hafdoon05.github.io/kasatria-3d-visualization/
 
-📊 Google Sheet
+📊 Data Source
 
-The Google Sheet containing the imported CSV data has been shared with the reviewer as required.
+The Google Sheet containing the imported CSV.
 
-🔧 Technologies Used
+🔧 Technologies
 
 Three.js (CSS3DRenderer)
 
-Google Identity Services (OAuth2 Login)
+Google Identity Services (OAuth2)
 
 Google Sheets CSV API
 
-HTML / CSS / JavaScript
+HTML / JavaScript
 
-GitHub Pages Hosting
+GitHub Pages
 
-🧩 Features
-✔ Google Sign-In Authentication
+🧩 Key Features
 
-Users must sign in using their Google account before accessing the visualization.
+Google Sign-In authentication
 
-✔ Dynamic Data Loading
+Dynamic CSV data loading from Google Sheets
 
-People data is retrieved directly from the Google Sheet (CSV URL) at runtime.
+3D interactive person tiles (photo, country, age, name, interest)
 
-✔ 3D Interactive Tiles
+Net worth color coding (red/orange/green glow)
 
-Each person is displayed as a stylized 3D card showing:
+Four 3D layouts: Table (20×10), Sphere, Double Helix, Grid (5×4×10)
 
-Country (top-left)
+Smooth transitions using TWEEN.js
 
-Age (top-right)
+📁 Structure
+index.html
+main.js
+assets/
 
-Photo
-
-Full Name
-
-Interest
-
-✔ Net Worth Color Coding
-
-Cards are highlighted with glowing borders depending on net worth:
-
-Red → < 100K
-
-Orange → 100K–199,999
-
-Green → ≥ 200K
-
-✔ Four 3D Layouts
-
-Users can switch between:
-
-Table (20×10)
-
-Sphere
-
-Double Helix (custom requirement)
-
-Grid (5×4×10)
-
-Includes smooth transitions using Three.js & TWEEN animations.
-
-📁 Project Structure
-├── index.html
-├── main.js
-└── assets/
-
-🛠 How to Run Locally
-
-Clone the repository:
-
+🛠 Run Locally
 git clone https://github.com/Hafdoon05/kasatria-3d-visualization.git
 
-
-Open the folder in VS Code.
-
-Start using Live Server:
-
-Right-click index.html → Open with Live Server
-
-Login using Google to view the 3D visualization.
+Open the folder in VS Code → Open with Live Server → Sign in with Google.
 
 🌐 Deployment
 
-The project is hosted using GitHub Pages.
-Any updates pushed to the main branch automatically update the live page.
+Hosted via GitHub Pages.
+Updates to the main branch automatically refresh the live site.
 
 📄 License
 
-This project is licensed under the MIT License.
+MIT License.
