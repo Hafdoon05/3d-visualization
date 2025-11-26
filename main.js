@@ -4,7 +4,7 @@ import TWEEN from 'three/addons/libs/tween.module.js';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 
-// CSV Data File - using local file due to CORS restrictions on Google Sheets
+// CSV Data File 
 const CSV_URL = 'Data Template.csv';
 
 // Global variables
@@ -108,14 +108,12 @@ async function loadDataAndInit() {
             header: true,
             skipEmptyLines: true,
             transformHeader: function (header) {
-                // Trim whitespace from headers
                 return header.trim();
             },
             complete: function (results) {
                 console.log('CSV parsing complete');
                 console.log('Raw results.data length:', results.data.length);
 
-                // Filter out empty rows
                 peopleData = results.data.filter(row => row.Name && row.Name.trim() !== '');
 
                 console.log(`Loaded ${peopleData.length} people from Google Sheets`);
@@ -151,7 +149,7 @@ async function loadDataAndInit() {
 function getColorClassByNetWorth(netWorth) {
     if (!netWorth) return 'element--gray';
 
-    // Parse net worth (remove dollar signs, commas, spaces and convert to number)
+    // Parse net worth
     const cleanValue = String(netWorth).replace(/[$,\s]/g, '');
     const value = parseFloat(cleanValue);
 
@@ -183,7 +181,6 @@ function init() {
     for (let i = 0; i < peopleData.length; i++) {
         const person = peopleData[i];
 
-        // Debug first person
         if (i === 0) {
             console.log('First person data:', person);
             console.log('Available keys:', Object.keys(person));
@@ -320,20 +317,20 @@ function calculateSphereLayout() {
 
 // Calculate HELIX layout (double helix - DNA style)
 function calculateHelixLayout() {
-    const radius = 900;                 // Larger radius for better visibility
-    const verticalSpacing = 15;         // Tighter vertical spacing
-    const rotationPerStep = 0.175;      // Rotation angle per step (in radians)
+    const radius = 900;                 
+    const verticalSpacing = 15;       
+    const rotationPerStep = 0.175;   
 
     for (let i = 0; i < objects.length; i++) {
-        const strand = i % 2;                           // 0 or 1 (which strand)
-        const t = Math.floor(i / 2);                   // step along helix
-        const angle = t * rotationPerStep;             // rotation step
-        const offset = strand * Math.PI;               // second strand shifted 180°
+        const strand = i % 2;                        
+        const t = Math.floor(i / 2);                 
+        const angle = t * rotationPerStep;           
+        const offset = strand * Math.PI;             
 
         // Calculate position using sine/cosine for circular motion
         const x = Math.sin(angle + offset) * radius;
         const z = Math.cos(angle + offset) * radius;
-        const y = -t * verticalSpacing + 450;          // vertical position
+        const y = -t * verticalSpacing + 450;        
 
         const object = new THREE.Object3D();
         object.position.set(x, y, z);
@@ -419,3 +416,4 @@ function animate() {
 function render() {
     renderer.render(scene, camera);
 }
+
