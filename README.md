@@ -1,11 +1,11 @@
-Kasatria 3D People Visualization
+3D People Visualization
 
-A 3D interactive data visualization built for the Kasatria preliminary assignment.
+A 3D interactive data visualization built for a preliminary assignment.
 The app uses Google Sign-In, Google Sheets, and Three.js CSS3DRenderer to display people data in multiple 3D layouts.
 
 🚀 Live Demo
 
-https://hafdoon05.github.io/kasatria-3d-visualization/
+https://hafdoon05.github.io/3d-visualization/
 
 📊 Data Source
 
@@ -43,7 +43,7 @@ main.js
 assets/
 
 🛠 Run Locally
-git clone https://github.com/Hafdoon05/kasatria-3d-visualization.git
+git clone https://github.com/Hafdoon05/3d-visualization.git
 
 Open the folder in VS Code → Open with Live Server → Sign in with Google.
 MIT License.
