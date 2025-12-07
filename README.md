@@ -33,7 +33,7 @@ Dynamic CSV data loading from Google Sheets
 
 Net worth color coding (red/orange/green glow)
 
-Four 3D layouts: Table (20×10), Sphere, Double Helix, Grid (5×4×10)
+Four 3D layouts: Table (20×10), Sphere, Double Helix, Grid (5×4×10), Tetrahedron
 
 Smooth transitions using TWEEN.js
 
