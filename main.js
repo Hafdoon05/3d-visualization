@@ -1,4 +1,4 @@
-// Import Three.js and addons
+// Import Three.js 
 import * as THREE from 'three';
 import TWEEN from 'three/addons/libs/tween.module.js';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
@@ -14,7 +14,7 @@ let isSignedIn = false;
 let peopleData = [];
 
 const objects = [];
-const targets = { table: [], sphere: [], helix: [], grid: [] };
+const targets = { table: [], sphere: [], helix: [], grid: [], tetrahedron: [] };
 
 // UI Elements
 const loginContainer = document.getElementById('login-container');
@@ -24,7 +24,7 @@ const userName = document.getElementById('user-name');
 const loading = document.getElementById('loading');
 const errorMessage = document.getElementById('error-message');
 
-// Handle Google Sign-In Response
+// Google Sign-In Response
 function handleGoogleSignIn(response) {
     console.log('handleGoogleSignIn called');
 
@@ -33,11 +33,10 @@ function handleGoogleSignIn(response) {
             throw new Error('Invalid response from Google Sign-In');
         }
 
-        // Decode JWT token to get user info
         const payload = parseJwt(response.credential);
         console.log('User signed in:', payload.name);
 
-        // Update UI with user information
+        // Update UI 
         userName.textContent = `Signed in as: ${payload.name}`;
         // Set user profile picture from Google
         if (payload.picture) {
@@ -70,7 +69,6 @@ if (window.setAppInitializer) {
     console.error('Global bridge not available');
 }
 
-// Parse JWT token
 function parseJwt(token) {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -89,7 +87,7 @@ function showError(message) {
     }, 5000);
 }
 
-// Load CSV data and initialize
+// Load CSV data
 async function loadDataAndInit() {
     loading.classList.add('visible');
 
@@ -103,7 +101,7 @@ async function loadDataAndInit() {
         console.log('CSV text received, length:', csvText.length);
         console.log('First 200 chars:', csvText.substring(0, 200));
 
-        // Parse CSV using PapaParse
+        // Parse CSV 
         Papa.parse(csvText, {
             header: true,
             skipEmptyLines: true,
@@ -114,6 +112,7 @@ async function loadDataAndInit() {
                 console.log('CSV parsing complete');
                 console.log('Raw results.data length:', results.data.length);
 
+                // Filter out 
                 peopleData = results.data.filter(row => row.Name && row.Name.trim() !== '');
 
                 console.log(`Loaded ${peopleData.length} people from Google Sheets`);
@@ -145,7 +144,7 @@ async function loadDataAndInit() {
     }
 }
 
-// Get color class based on Net Worth
+// Color class based on Net Worth
 function getColorClassByNetWorth(netWorth) {
     if (!netWorth) return 'element--gray';
 
@@ -159,15 +158,15 @@ function getColorClassByNetWorth(netWorth) {
     }
 
     if (value < 100000) {
-        return 'element--red'; // Red
+        return 'element--red';
     } else if (value < 200000) {
-        return 'element--orange'; // Orange
+        return 'element--orange';
     } else {
-        return 'element--green'; // Green
+        return 'element--green';
     }
 }
 
-// Initialize Three.js scene
+// Initialize Three.js
 function init() {
     // Camera setup
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000);
@@ -186,7 +185,7 @@ function init() {
             console.log('Available keys:', Object.keys(person));
         }
 
-        // Get country code (first 2 letters, uppercase)
+        // Get country code
         const countryCode = person.Country ? person.Country.substring(0, 2).toUpperCase() : '??';
         const age = person.Age || '?';
         const photoUrl = person.Photo || '';
@@ -229,6 +228,7 @@ function init() {
     calculateSphereLayout();
     calculateHelixLayout();
     calculateGridLayout();
+    calculateTetrahedronLayout();
 
     // Renderer setup
     renderer = new CSS3DRenderer();
@@ -260,6 +260,11 @@ function init() {
     document.getElementById('grid').addEventListener('click', function () {
         setActiveButton('grid');
         transform(targets.grid, 2000);
+    });
+
+    document.getElementById('tetrahedron').addEventListener('click', function () {
+        setActiveButton('tetrahedron');
+        transform(targets.tetrahedron, 2000);
     });
 
     // Window resize handler
@@ -315,22 +320,22 @@ function calculateSphereLayout() {
     }
 }
 
-// Calculate HELIX layout (double helix - DNA style)
+// Calculate HELIX layout (double helix)
 function calculateHelixLayout() {
-    const radius = 900;                 
-    const verticalSpacing = 15;       
-    const rotationPerStep = 0.175;   
+    const radius = 900;
+    const verticalSpacing = 15;
+    const rotationPerStep = 0.175;
 
     for (let i = 0; i < objects.length; i++) {
-        const strand = i % 2;                        
-        const t = Math.floor(i / 2);                 
-        const angle = t * rotationPerStep;           
-        const offset = strand * Math.PI;             
+        const strand = i % 2;
+        const t = Math.floor(i / 2);
+        const angle = t * rotationPerStep;
+        const offset = strand * Math.PI;
 
         // Calculate position using sine/cosine for circular motion
         const x = Math.sin(angle + offset) * radius;
         const z = Math.cos(angle + offset) * radius;
-        const y = -t * verticalSpacing + 450;        
+        const y = -t * verticalSpacing + 450;
 
         const object = new THREE.Object3D();
         object.position.set(x, y, z);
@@ -364,6 +369,113 @@ function calculateGridLayout() {
     }
 }
 
+// Calculate TETRAHEDRON Layout 
+function calculateTetrahedronLayout() {
+    // 1. Configuration
+    const cardWidth = 160;
+    const cardHeight = 220;
+    const gap = 15;
+    const tileW = cardWidth + gap;
+    const tileH = cardHeight + gap;
+
+
+    // Side Triangles (10 Rows) -> 51 Cards
+    const sideRowCounts = [1, 2, 3, 4, 5, 6, 6, 7, 8, 9];
+
+    // Base Triangle (8 Rows) -> 47 Cards
+    const baseRowCounts = [2, 3, 4, 6, 7, 8, 8, 9];
+
+    const totalRows = 10;
+    const faceAltitude = totalRows * tileH;
+
+    // Calculate Radius 
+    const radius = (faceAltitude / 1.5) * 1.05;
+    const pyramidHeight = radius * 1.4;
+
+    // Vertices
+    const tip = new THREE.Vector3(0, pyramidHeight * 0.6, 0);
+    const yBase = -pyramidHeight * 0.4;
+
+    const angleStep = (Math.PI * 2) / 3;
+    const v1 = new THREE.Vector3(radius * Math.cos(0), yBase, radius * Math.sin(0));
+    const v2 = new THREE.Vector3(radius * Math.cos(angleStep), yBase, radius * Math.sin(angleStep));
+    const v3 = new THREE.Vector3(radius * Math.cos(2 * angleStep), yBase, radius * Math.sin(2 * angleStep));
+
+    // Faces: [Top, BottomLeft, BottomRight]
+    const faces = [
+        [tip, v1, v2],
+        [tip, v2, v3],
+        [tip, v3, v1],
+        [v3, v2, v1]
+    ];
+
+    // Layout 
+    let objectIndex = 0;
+    targets.tetrahedron = [];
+
+    for (let f = 0; f < faces.length; f++) {
+        const isBase = (f === 3);
+        const [A, B, C] = faces[f];
+
+        const currentPattern = isBase ? baseRowCounts : sideRowCounts;
+        const rowsInFace = currentPattern.length;
+
+        const edge1 = new THREE.Vector3().subVectors(B, A);
+        const edge2 = new THREE.Vector3().subVectors(C, A);
+        const normal = new THREE.Vector3().crossVectors(edge1, edge2).normalize();
+
+        // Loop 
+        for (let rIndex = 0; rIndex < rowsInFace; rIndex++) {
+            const itemsInRow = currentPattern[rIndex];
+
+            let effectiveRowIndex = rIndex;
+
+            if (isBase) {
+                effectiveRowIndex += (totalRows - rowsInFace);
+            }
+
+            // Calculate Progress 
+            const rowProgress = (effectiveRowIndex + 1) / (totalRows + 0.5);
+
+            // Interpolate Line Position
+            const leftBound = new THREE.Vector3().lerpVectors(A, B, rowProgress);
+            const rightBound = new THREE.Vector3().lerpVectors(A, C, rowProgress);
+
+            const lineVec = new THREE.Vector3().subVectors(rightBound, leftBound);
+            const lineDir = lineVec.clone().normalize();
+
+            // Center the content
+            const lineCenter = new THREE.Vector3().lerpVectors(leftBound, rightBound, 0.5);
+            const contentWidth = itemsInRow * tileW;
+            const startPos = lineCenter.clone().addScaledVector(lineDir, -contentWidth / 2 + tileW / 2);
+
+            for (let c = 0; c < itemsInRow; c++) {
+                if (objectIndex >= objects.length) break;
+
+                // Position
+                const pos = startPos.clone().addScaledVector(lineDir, c * tileW);
+                const target = new THREE.Object3D();
+                target.position.copy(pos);
+
+                // ORIENTATION
+                if (isBase) {
+                    // Flat Base
+                    target.rotation.x = -Math.PI / 2;
+                    const angle = Math.atan2(lineDir.z, lineDir.x);
+                    target.rotation.z = angle;
+                    target.rotation.y = Math.PI;
+                } else {
+                    // Sides
+                    const lookAtPos = pos.clone().add(normal.clone().multiplyScalar(100));
+                    target.lookAt(lookAtPos);
+                }
+
+                targets.tetrahedron.push(target);
+                objectIndex++;
+            }
+        }
+    }
+}
 // Transform objects to target positions
 function transform(targets, duration) {
     TWEEN.removeAll();
